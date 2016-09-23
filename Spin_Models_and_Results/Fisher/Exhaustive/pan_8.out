@@ -1,0 +1,97 @@
+error: max search depth too small
+Depth=  999999 States=    1e+06 Transitions= 3.28e+06 Memory=   159.368	t=     2.31 R=   4e+05
+Depth=  999999 States=    2e+06 Transitions= 7.05e+06 Memory=   216.594	t=     4.97 R=   4e+05
+Depth=  999999 States=    3e+06 Transitions= 1.08e+07 Memory=   273.918	t=     7.71 R=   4e+05
+Depth=  999999 States=    4e+06 Transitions= 1.49e+07 Memory=   331.145	t=     10.4 R=   4e+05
+Depth=  999999 States=    5e+06 Transitions= 1.94e+07 Memory=   388.371	t=     13.2 R=   4e+05
+Depth=  999999 States=    6e+06 Transitions= 2.38e+07 Memory=   445.598	t=     16.1 R=   4e+05
+Depth=  999999 States=    7e+06 Transitions=  2.8e+07 Memory=   502.825	t=     19.2 R=   4e+05
+Depth=  999999 States=    8e+06 Transitions= 3.32e+07 Memory=   560.051	t=     22.9 R=   3e+05
+Depth=  999999 States=    9e+06 Transitions= 3.81e+07 Memory=   617.375	t=     26.5 R=   3e+05
+Depth=  999999 States=    1e+07 Transitions= 4.18e+07 Memory=   674.602	t=     29.5 R=   3e+05
+Depth=  999999 States=  1.1e+07 Transitions= 4.47e+07 Memory=   731.828	t=     31.8 R=   3e+05
+Depth=  999999 States=  1.2e+07 Transitions= 4.89e+07 Memory=   789.055	t=     34.3 R=   4e+05
+Depth=  999999 States=  1.3e+07 Transitions= 5.19e+07 Memory=   846.282	t=     36.7 R=   4e+05
+Depth=  999999 States=  1.4e+07 Transitions= 5.53e+07 Memory=   903.508	t=     39.1 R=   4e+05
+Depth=  999999 States=  1.5e+07 Transitions=  5.9e+07 Memory=   960.832	t=     41.7 R=   4e+05
+Depth=  999999 States=  1.6e+07 Transitions= 6.35e+07 Memory=  1018.059	t=     44.7 R=   4e+05
+Depth=  999999 States=  1.7e+07 Transitions= 6.74e+07 Memory=  1075.286	t=     47.8 R=   4e+05
+Depth=  999999 States=  1.8e+07 Transitions= 7.12e+07 Memory=  1132.512	t=     50.8 R=   4e+05
+Depth=  999999 States=  1.9e+07 Transitions= 7.56e+07 Memory=  1189.739	t=       54 R=   4e+05
+Depth=  999999 States=    2e+07 Transitions=  7.9e+07 Memory=  1246.965	t=     57.1 R=   4e+05
+Depth=  999999 States=  2.1e+07 Transitions= 8.38e+07 Memory=  1304.289	t=     60.3 R=   3e+05
+Depth=  999999 States=  2.2e+07 Transitions= 8.73e+07 Memory=  1361.516	t=     63.3 R=   3e+05
+Depth=  999999 States=  2.3e+07 Transitions= 9.09e+07 Memory=  1418.743	t=     66.4 R=   3e+05
+Depth=  999999 States=  2.4e+07 Transitions= 9.55e+07 Memory=  1475.969	t=     69.9 R=   3e+05
+Depth=  999999 States=  2.5e+07 Transitions=    1e+08 Memory=  1533.196	t=     73.5 R=   3e+05
+Depth=  999999 States=  2.6e+07 Transitions= 1.04e+08 Memory=  1590.422	t=     76.5 R=   3e+05
+Depth=  999999 States=  2.7e+07 Transitions= 1.08e+08 Memory=  1647.746	t=     79.8 R=   3e+05
+Depth=  999999 States=  2.8e+07 Transitions= 1.13e+08 Memory=  1704.973	t=     83.3 R=   3e+05
+Depth=  999999 States=  2.9e+07 Transitions= 1.18e+08 Memory=  1762.200	t=     86.9 R=   3e+05
+Depth=  999999 States=    3e+07 Transitions= 1.23e+08 Memory=  1819.426	t=     90.4 R=   3e+05
+Depth=  999999 States=  3.1e+07 Transitions= 1.26e+08 Memory=  1876.653	t=     93.2 R=   3e+05
+Depth=  999999 States=  3.2e+07 Transitions= 1.29e+08 Memory=  1933.879	t=       96 R=   3e+05
+Depth=  999999 States=  3.3e+07 Transitions= 1.32e+08 Memory=  1991.203	t=     99.1 R=   3e+05
+Depth=  999999 States=  3.4e+07 Transitions= 1.35e+08 Memory=  2048.430	t=      102 R=   3e+05
+pan: resizing hashtable to -w26..  done
+Depth=  999999 States=  3.5e+07 Transitions=  1.4e+08 Memory=  2345.739	t=      115 R=   3e+05
+Depth=  999999 States=  3.6e+07 Transitions= 1.44e+08 Memory=  2402.965	t=      119 R=   3e+05
+Depth=  999999 States=  3.7e+07 Transitions= 1.49e+08 Memory=  2460.192	t=      122 R=   3e+05
+Depth=  999999 States=  3.8e+07 Transitions= 1.53e+08 Memory=  2517.418	t=      126 R=   3e+05
+Depth=  999999 States=  3.9e+07 Transitions= 1.56e+08 Memory=  2574.645	t=      129 R=   3e+05
+Depth=  999999 States=    4e+07 Transitions=  1.6e+08 Memory=  2631.969	t=      132 R=   3e+05
+Depth=  999999 States=  4.1e+07 Transitions= 1.64e+08 Memory=  2689.196	t=      135 R=   3e+05
+Depth=  999999 States=  4.2e+07 Transitions= 1.67e+08 Memory=  2746.422	t=      139 R=   3e+05
+Depth=  999999 States=  4.3e+07 Transitions= 1.72e+08 Memory=  2803.649	t=      142 R=   3e+05
+Depth=  999999 States=  4.4e+07 Transitions= 1.76e+08 Memory=  2860.875	t=      146 R=   3e+05
+Depth=  999999 States=  4.5e+07 Transitions= 1.82e+08 Memory=  2918.102	t=      151 R=   3e+05
+Depth=  999999 States=  4.6e+07 Transitions= 1.86e+08 Memory=  2975.426	t=      155 R=   3e+05
+Depth=  999999 States=  4.7e+07 Transitions=  1.9e+08 Memory=  3032.653	t=      158 R=   3e+05
+Depth=  999999 States=  4.8e+07 Transitions= 1.95e+08 Memory=  3089.879	t=      163 R=   3e+05
+Depth=  999999 States=  4.9e+07 Transitions=    2e+08 Memory=  3147.106	t=      167 R=   3e+05
+Depth=  999999 States=    5e+07 Transitions= 2.04e+08 Memory=  3204.332	t=      171 R=   3e+05
+Depth=  999999 States=  5.1e+07 Transitions= 2.07e+08 Memory=  3261.559	t=      174 R=   3e+05
+Depth=  999999 States=  5.2e+07 Transitions=  2.1e+08 Memory=  3318.883	t=      177 R=   3e+05
+Depth=  999999 States=  5.3e+07 Transitions= 2.14e+08 Memory=  3376.110	t=      181 R=   3e+05
+Depth=  999999 States=  5.4e+07 Transitions= 2.19e+08 Memory=  3433.336	t=      185 R=   3e+05
+Depth=  999999 States=  5.5e+07 Transitions= 2.23e+08 Memory=  3490.563	t=      189 R=   3e+05
+Depth=  999999 States=  5.6e+07 Transitions= 2.27e+08 Memory=  3547.789	t=      193 R=   3e+05
+Depth=  999999 States=  5.7e+07 Transitions= 2.32e+08 Memory=  3605.016	t=      198 R=   3e+05
+Depth=  999999 States=  5.8e+07 Transitions= 2.38e+08 Memory=  3662.340	t=      203 R=   3e+05
+pan: out of memory
+hint: to reduce memory, recompile with
+  -DCOLLAPSE # good, fast compression, or
+  -DMA=60   # better/slower compression, or
+  -DHC # hash-compaction, approximation
+  -DBITSTATE # supertrace, approximation
+
+(Spin Version 6.4.3 -- 16 December 2014)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	- (none specified)
+	assertion violations	+
+	acceptance   cycles 	- (not selected)
+	invalid end states	+
+
+State-vector 60 byte, depth reached 999999, errors: 0
+ 58475818 states, stored
+1.82007e+08 states, matched
+2.4048282e+08 transitions (= stored+matched)
+4.4590487e+08 atomic steps
+hash conflicts:  77073671 (resolved)
+
+Stats on memory usage (in Megabytes):
+ 4238.283	equivalent memory usage for states (stored*(State-vector + overhead))
+ 3400.614	actual memory usage for states (compression: 80.24%)
+         	state-vector as stored = 45 byte + 16 byte overhead
+  256.000	memory used for hash table (-w26)
+   34.332	memory used for DFS stack (-m1000000)
+    1.457	memory lost to fragmentation
+ 3689.489	total actual memory usage
+
+
+
+pan: elapsed time 206 seconds
+pan: rate  284470.8 states/second

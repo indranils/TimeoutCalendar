@@ -1,0 +1,72 @@
+#define p	t_state == t2
+#define q	g_state == g2
+
+	/*
+	 * Formula As Typed: []  (p -> q)
+	 * The Never Claim Below Corresponds
+	 * To The Negated Formula !([]  (p -> q))
+	 * (formalizing violations of the original)
+	 * [] ((t_state == t2) -> (g_state == g2))
+	 */
+
+never {    /* !([]  (p -> q)) */
+T0_init:
+	if
+	:: (! ((q)) && (p)) -> goto accept_all
+	:: (1) -> goto T0_init
+	fi;
+accept_all:
+	skip
+}
+
+#ifdef NOTES
+Use Load to open a file or a template.
+
+#endif
+#ifdef RESULT
+warning: for p.o. reduction to be valid the never claim must be stutter-invariant
+(never claims generated from LTL formulae are stutter-invariant)
+depth 0: Claim reached state 5 (line 238)
+(Spin Version 4.2.6 -- 27 October 2005)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 60 byte, depth reached 1189, errors: 0
+    1082 states, stored
+    1022 states, matched
+    2104 transitions (= stored+matched)
+    2293 atomic steps
+hash conflicts: 1 (resolved)
+
+Stats on memory usage (in Megabytes):
+0.074 	equivalent memory usage for states (stored*(State-vector + overhead))
+0.287 	actual memory usage for states (unsuccessful compression: 390.02%)
+	State-vector as stored = 257 byte + 8 byte overhead
+2.097 	memory used for hash table (-w19)
+0.320 	memory used for DFS stack (-m10000)
+0.156 	other (proc and chan stacks)
+0.082 	memory lost to fragmentation
+2.622 	total actual memory usage
+
+unreached in proctype train
+	line 72, "pan.___", state 68, "-end-"
+	(1 of 68 states)
+unreached in proctype controller
+	line 118, "pan.___", state 44, "-end-"
+	(1 of 44 states)
+unreached in proctype gate
+	line 163, "pan.___", state 52, "-end-"
+	(1 of 52 states)
+unreached in proctype time_progress
+	line 197, "pan.___", state 29, "-end-"
+	(1 of 29 states)
+unreached in proctype :never:
+	line 243, "pan.___", state 8, "-end-"
+	(1 of 8 states)
+
+#endif

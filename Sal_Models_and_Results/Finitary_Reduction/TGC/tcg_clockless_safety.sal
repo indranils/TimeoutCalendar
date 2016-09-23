@@ -1,0 +1,219 @@
+tcg_clockless_safety: CONTEXT =
+  BEGIN
+    SIGNAL: TYPE = { approach, exit, lower, raise };
+    N: NATURAL = 3;
+    INDEX: TYPE = [1..N];
+    INF: NATURAL = 100; 
+    TIMEOUT_VALUE: TYPE = [0..INF];
+    TIMEOUT_ARRAY: TYPE = ARRAY INDEX OF TIMEOUT_VALUE;
+
+    %time_out: TIMEOUT_ARRAY;
+
+    %-----------------------
+    % Minimum of an array
+    %-----------------------
+
+    recur_min(x: TIMEOUT_ARRAY, min_sofar: NATURAL, idx: [0 .. N]): NATURAL =
+      IF idx = 0 THEN min_sofar
+      ELSE recur_min(x, min(min_sofar, x[idx]), idx-1)
+      ENDIF;
+
+    min(x: TIMEOUT_ARRAY): NATURAL = recur_min(x, x[N], N-1);
+
+    %---------------------------------------------------------
+    % Clock module: makes time elapse up to the next timeout
+    %---------------------------------------------------------
+
+    clock: MODULE =
+    BEGIN
+      GLOBAL time_out: TIMEOUT_ARRAY
+      GLOBAL flag1, flag2: BOOLEAN
+
+    TRANSITION
+      [ time_elapses: 
+          min(time_out) > 0 AND (NOT flag1) AND (NOT flag2) -->
+            time_out' = [[i:INDEX] time_out[i] - min(time_out)];
+      ]
+    END;
+
+    %---------
+    % Train
+    %---------
+
+    T_STATE: TYPE = { t0, t1, t2, t3 };
+    train: MODULE =
+    BEGIN
+      OUTPUT
+        msg1: SIGNAL
+      GLOBAL time_out: TIMEOUT_ARRAY 
+      GLOBAL flag1, flag3: BOOLEAN
+      LOCAL
+        t_state: T_STATE,
+        time1: TIMEOUT_VALUE,
+        temp1: TIMEOUT_VALUE 
+    INITIALIZATION
+      t_state = t0;
+      time_out[1] IN { x: TIMEOUT_VALUE | x > 0 AND x < INF };
+      msg1 = exit;
+      temp1 = 0;
+      time1 = 0;
+      flag1 = FALSE;
+      flag3 = TRUE;
+    TRANSITION
+      [ t0_t1:
+          t_state = t0 AND time_out[1] = 0 AND flag3 = TRUE -->
+            t_state' = t1;
+            msg1' = approach;
+            flag1' = TRUE;
+            flag3' = FALSE;
+            temp1' IN {x: NATURAL | x > 20 AND x < 48}; 
+            time_out'[1] = temp1';
+            time_out'[2] = INF;
+            time1' = temp1' 
+      [] t1_t2:
+          t_state = t1 AND time_out[1] = 0 -->
+            t_state' = t2;
+            temp1' IN { x: NATURAL | x > 0 AND x < 49 - time1 };
+            time_out' = time_out WITH [1] := temp1';
+            time1' = time1 + temp1'; 
+      [] t2_t3:
+          t_state = t2 AND time_out[1] = 0 -->
+            t_state' = t3;
+            temp1' IN { x: NATURAL | x > 0 AND x < 50 - time1 };
+            time_out' = time_out WITH [1] := temp1' 
+      [] t3_t0:
+          t_state = t3 AND time_out[1] = 0 -->
+            t_state' = t0;
+            msg1' = exit;
+            flag1' = TRUE;
+            %temp1' IN { x: NATURAL | x > 0 };
+            %time_out' = time_out WITH [1] := temp1' 
+            time_out' = time_out WITH [1] := INF 
+      ]
+      END;
+
+    %---------
+    % GATE
+    %---------
+    G_STATE: TYPE = { g0, g1, g2, g3 };
+    gate: MODULE =
+      BEGIN
+        INPUT
+          msg2: SIGNAL
+        GLOBAL time_out: TIMEOUT_ARRAY
+        GLOBAL flag2, flag3: BOOLEAN
+        LOCAL
+          g_state: G_STATE,
+          temp2: TIMEOUT_VALUE 
+        INITIALIZATION
+          g_state = g0;
+          temp2 = 0;
+          time_out[2] = INF; 
+          flag2 = FALSE;
+          flag3 = TRUE 
+        TRANSITION
+        [ g0_g1:
+          g_state = g0 AND msg2 = lower AND flag2 = TRUE -->
+            g_state' = g1;
+            flag2' = FALSE;
+            temp2' IN { x: NATURAL | x > 0 AND x < 10 };
+            time_out' = time_out WITH [2] := temp2' 
+        [] g1_g2:
+          g_state = g1 AND time_out[2] = 0 -->
+            g_state' = g2;
+            %time_out' = time_out WITH [2] := INF 
+            time_out'[2] = INF 
+        [] g2_g3:
+            g_state = g2 AND msg2 = raise AND flag2 = TRUE -->
+            g_state' = g3;
+            flag2' = FALSE;
+            temp2' IN { x: NATURAL | x > 10 AND x < 20 };
+            time_out' = time_out WITH [2] := temp2' 
+        [] g3_g0:
+            g_state = g3 AND time_out[2] = 0 -->
+            g_state' = g0;
+            flag3' = TRUE;
+            time_out' = time_out WITH [2] := INF;
+        ]
+      END;
+
+    %-------------
+    % Controller
+    %-------------
+    C_STATE: TYPE = { c0, c1, c2, c3 };
+    controller : MODULE =
+      BEGIN
+        INPUT
+          msg1: SIGNAL
+        OUTPUT
+          msg2: SIGNAL
+        GLOBAL flag1, flag2: BOOLEAN
+        GLOBAL time_out: TIMEOUT_ARRAY
+        LOCAL
+          c_state: C_STATE,
+          temp3: TIMEOUT_VALUE 
+      INITIALIZATION
+        c_state = c0;
+        temp3 = 0;
+        time_out[3] = INF;
+        flag1 = FALSE;
+        flag2 = FALSE;
+        msg2 =  raise
+      TRANSITION
+        [ c0_c1:
+          c_state = c0 AND msg1 = approach AND flag1 = TRUE -->
+            c_state' = c1;
+            flag1' = FALSE;
+            temp3' IN { x: NATURAL | x > 0 AND x < 10 };
+            time_out' = time_out WITH [3] :=temp3' 
+        [] c1_c2:
+            c_state = c1 AND time_out[3] = 0 -->
+            c_state' = c2;
+            msg2' = lower;
+            flag2' = TRUE;
+            time_out' = time_out WITH [3] := INF 
+        [] c2_c3:
+            c_state = c2 AND msg1 = exit AND flag1 = TRUE -->
+            c_state' = c3;
+            flag1' = FALSE;
+            temp3' IN { x: NATURAL | x > 0 AND x < 10 };
+            time_out' = time_out WITH [3] :=temp3' 
+        [] c3_c0:
+            c_state = c3 AND time_out[3] = 0 -->
+            c_state' = c0;
+            msg2' = raise;
+            flag2' = TRUE;
+            time_out' = time_out WITH [3] := INF; 
+        ]
+    END;
+
+    %----------------------------------------------------
+    % Asynchronous composition: all processes together
+    % time_out[i] = timeout variable of train (i=1),
+    % gate (i=1), controller (i=3)
+    %----------------------------------------------------
+
+    tcg: MODULE = train [] gate [] controller;
+
+    %tgc: MODULE =
+      %WITH OUTPUT time_out: TIMEOUT_ARRAY
+        %(RENAME timeout TO time_out[1] IN train)
+        %[]
+        %(RENAME timeout TO time_out[2] IN gate)
+        %[]
+        %(RENAME timeout TO time_out[3] IN controller);
+
+    system: MODULE = clock [] tcg;
+
+    %-----------
+    % properties
+    %-----------
+
+    %time_aux1: LEMMA system |- G(FORALL (i:INDEX): time <= time_out[i]);
+    %time_aux2: LEMMA system |- G(t_state = t2 => time_out[1] - time <= 5);
+    time_aux3: LEMMA
+      system |- G(t_state = t1 AND g_state = g1 => time_out[1] > time_out[2]);
+
+    safe: LEMMA system |- G(t_state = t2 => g_state = g2);
+    nosafe: LEMMA system |- G(t_state = t2 => g_state = g3);
+END

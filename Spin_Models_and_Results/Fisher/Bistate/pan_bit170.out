@@ -1,0 +1,34 @@
+pan: error, VECTORSZ too small, recompile pan.c with -DVECTORSZ=N with N>1024
+pan:1: aborting (at depth 495)
+pan: wrote fischer.trail
+
+(Spin Version 6.4.3 -- 16 December 2014)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Bit statespace search for:
+	never claim         	- (none specified)
+	assertion violations	+
+	acceptance   cycles 	- (not selected)
+	invalid end states	+
+
+State-vector 1024 byte, depth reached 495, errors: 1
+        1 states, stored
+        0 states, matched
+        1 transitions (= stored+matched)
+      495 atomic steps
+
+hash factor: 1.34218e+08 (best if > 100.)
+
+bits set per state: 3 (-k3)
+
+Stats on memory usage (in Megabytes):
+    0.001	equivalent memory usage for states (stored*(State-vector + overhead))
+   16.000	memory used for hash array (-w27)
+  209.808	memory used for bit stack
+ 1888.275	memory used for DFS stack (-m55000000)
+ 2114.279	total actual memory usage
+
+
+
+pan: elapsed time 0.004 seconds

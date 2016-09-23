@@ -1,0 +1,138 @@
+fischer_clockless_1: CONTEXT =
+  BEGIN
+    N: NATURAL = 11;
+    IDENTITY: TYPE = [1..N];
+    LOCK_VALUE: TYPE = [0..N];
+    %delta1: {x: NATURAL | 0 < x};
+    %delta2: {x : NATURAL | delta1 < x};
+    delta1: NATURAL = 1;
+    delta2: NATURAL = 2;
+    TIMEOUT_VALUE: TYPE = [0..3];
+    TIMEOUT_ARRAY: TYPE = ARRAY IDENTITY OF TIMEOUT_VALUE;
+
+    %-----------------------
+    % Minimum of an array
+    %-----------------------
+    is_min(x: TIMEOUT_ARRAY, t: TIMEOUT_VALUE): bool =
+      (FORALL (i: IDENTITY): t <= x[i]) AND (EXISTS (i: IDENTITY): t = x[i]);
+
+    recur_min(x: TIMEOUT_ARRAY, min_sofar: NATURAL, idx: [0 .. N]): NATURAL = 
+      IF idx = 0 THEN min_sofar
+      ELSE recur_min(x, min(min_sofar, x[idx]), idx-1)
+      ENDIF;
+
+    min(x: TIMEOUT_ARRAY): NATURAL = recur_min(x, x[N], N-1); 
+
+    %---------------------------------------------------------
+    % Clock module: makes time elapse up to the next timeout
+    %---------------------------------------------------------
+    clock: MODULE =
+    BEGIN
+      GLOBAL time_out: TIMEOUT_ARRAY
+
+      INITIALIZATION
+        (FORALL (i: IDENTITY): time_out[i] IN {x: TIMEOUT_VALUE | x > 0});
+	%temp = 0;
+
+      TRANSITION
+      [ time_elapses:
+        (FORALL (i: IDENTITY): time_out[i] > 0 ) -->
+        %min(time_out) > 0 -->
+          %temp' IN { t: TIMEOUT_VALUE | is_min(time_out, t) };
+          %time_out1' = [[i: IDENTITY] time_out[i] - temp']
+          time_out' = [[i: IDENTITY] time_out[i] - min(time_out)];
+      ]
+    END;
+
+    %--------------
+    % Process[i]
+    %--------------
+
+    PC: TYPE = { sleeping, waiting, trying, critical };
+
+    process[i: IDENTITY]: MODULE =
+    BEGIN
+      GLOBAL time_out: TIMEOUT_ARRAY
+      GLOBAL lock: LOCK_VALUE
+      LOCAL pc: PC
+      LOCAL temp: TIMEOUT_VALUE
+    INITIALIZATION
+      lock = 0;
+      pc = sleeping;
+      temp = 0
+      %timeout IN { x: TIMEOUT_VALUE | x > 0 };
+    TRANSITION
+      [ waking_up:
+        pc = sleeping AND time_out[i] <= 0 AND lock = 0 -->
+        pc' = waiting;
+        temp' IN { x: TIMEOUT_VALUE | x > 0 AND x <= delta1 };
+        time_out'[i] = temp'
+      [] try_again_later:
+        pc = sleeping AND time_out[i] <= 0 AND lock /= 0 -->
+        temp' IN { x: TIMEOUT_VALUE | x > 0 };
+        time_out'[i] = temp'
+      [] setting_lock:
+      pc = waiting AND time_out[i] <= 0 -->
+        pc' = trying;
+        lock' = i;
+        temp' IN { x: TIMEOUT_VALUE  | x >= delta2 };
+        time_out'[i] = temp'
+      [] entering_cs:
+      pc = trying AND time_out[i] <= 0 AND lock = i -->
+        pc' = critical;
+        temp' IN { x: TIMEOUT_VALUE | x > 0 };
+        time_out'[i] = temp'
+      [] lock_changed:
+      pc = trying AND time_out[i] <= 0 AND lock /= i -->
+        pc' = sleeping;
+        temp' IN { x: TIMEOUT_VALUE | x > 0 };
+        time_out'[i] = temp'
+      [] exiting_cs:
+      pc = critical AND time_out[i] <= 0 -->
+        pc' = sleeping;
+        lock' = 0;
+        temp' IN { x: TIMEOUT_VALUE | x > 0 };
+        time_out'[i] = temp'
+  ]
+  END;
+
+  %----------------------------------------------------
+  % Asynchronous composition: all processes together
+  % time_out[i] = timeout variable of process[i]
+  %----------------------------------------------------
+  processes: MODULE = ([] (i: IDENTITY): process[i]);
+    %WITH GLOBAL time_out: TIMEOUT_ARRAY
+    %  ([] (i: IDENTITY): (RENAME timeout TO time_out[i] IN process[i]));
+
+  system: MODULE = clock [] processes;
+
+  %--------------
+  % Properties
+  %--------------
+  %time_aux0: LEMMA
+  %system |- G(time >= 0 AND FORALL (i: IDENTITY): time_out[i] > 0);
+
+  time_aux1: LEMMA
+  system |- G(FORALL (i: IDENTITY): time_out[i] >= 0);
+
+  time_aux2: LEMMA
+  system |- G(FORALL (i: IDENTITY):
+  pc[i] = waiting => time_out[i] <= delta1);
+
+
+  time_aux3: LEMMA
+  system |- G(FORALL (i, j: IDENTITY):
+  lock = i AND pc[j] = waiting => time_out[i] > time_out[j]);
+
+  logical_aux1: LEMMA
+  system |- G(FORALL (i, j: IDENTITY): pc[i] = critical => lock = i AND pc[j] /= waiting);
+
+  mutex: THEOREM
+    system |- G(FORALL (i: IDENTITY): pc[i] = critical => lock = i);
+
+  mutual_exclusion: THEOREM
+    system |- G(FORALL (i, j: IDENTITY):i /= j AND pc[i] = critical => pc[j] /= critical);
+
+  mutual_exclusion1: THEOREM
+    system |- G(FORALL (i, j: IDENTITY): (pc[i] = critical AND pc[j] = critical) => i = j);
+END

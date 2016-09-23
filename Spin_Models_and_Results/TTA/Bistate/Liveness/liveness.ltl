@@ -1,0 +1,3 @@
+ltl liveness { <>[]pp }
+
+ltl safety { pp }

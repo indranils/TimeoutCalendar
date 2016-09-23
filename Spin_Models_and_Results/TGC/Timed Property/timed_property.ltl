@@ -1,0 +1,128 @@
+#define p	time <= 18
+
+
+	/*
+	 * Formula As Typed: []  p 
+	 * The Never Claim Below Corresponds
+	 * To The Negated Formula !([]  p )
+	 * (formalizing violations of the original)
+	 * [] (time <= 20)
+	 */
+
+never {    /* !([]  p ) */
+T0_init:
+	if
+	:: (! ((p))) -> goto accept_all
+	:: (1) -> goto T0_init
+	fi;
+accept_all:
+	skip
+}
+
+#ifdef NOTES
+Use Load to open a file or a template.
+
+
+#endif
+#ifdef RESULT
+warning: for p.o. reduction to be valid the never claim must be stutter-invariant
+(never claims generated from LTL formulae are stutter-invariant)
+depth 0: Claim reached state 5 (line 235)
+pan: claim violated! (at depth 261)
+pan: wrote pan_in.trail
+(Spin Version 4.2.6 -- 27 October 2005)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 72 byte, depth reached 261, errors: 1
+      89 states, stored
+       0 states, matched
+      89 transitions (= stored+matched)
+      84 atomic steps
+hash conflicts: 0 (resolved)
+
+Stats on memory usage (in Megabytes):
+0.007 	equivalent memory usage for states (stored*(State-vector + overhead))
+0.286 	actual memory usage for states (unsuccessful compression: 4010.34%)
+	State-vector as stored = 3200 byte + 8 byte overhead
+2.097 	memory used for hash table (-w19)
+3.200 	memory used for DFS stack (-m100000)
+3.039 	other (proc and chan stacks)
+0.081 	memory lost to fragmentation
+5.502 	total actual memory usage
+
+unreached in proctype train
+	line 32, "pan.___", state 11, "random_timeout = 0"
+	line 32, "pan.___", state 24, "random_timeout = 21"
+	line 42, "pan.___", state 30, "t_state = t1"
+	line 25, "pan.___", state 39, "(((random_timeout>=0)&&(random_timeout<(50-time1))))"
+	line 25, "pan.___", state 39, "((random_timeout==(50-time1)))"
+	line 32, "pan.___", state 42, "random_timeout = 0"
+	line 53, "pan.___", state 45, "t_state = t2"
+	line 32, "pan.___", state 57, "random_timeout = 0"
+	line 65, "pan.___", state 58, "time_out[0] = random_timeout"
+	line 61, "pan.___", state 59, "t_state = t3"
+	line 72, "pan.___", state 63, "t_signal = exit"
+	line 73, "pan.___", state 64, "msg1!t_signal"
+	line 68, "pan.___", state 65, "t_state = t0"
+	line 40, "pan.___", state 66, "(((t_state==t0)&&(time_out[0]==0)))"
+	line 40, "pan.___", state 66, "(((t_state==t1)&&(time_out[0]==0)))"
+	line 40, "pan.___", state 66, "(((t_state==t2)&&(time_out[0]==0)))"
+	line 40, "pan.___", state 66, "(((t_state==t3)&&(time_out[0]==0)))"
+	line 76, "pan.___", state 69, "-end-"
+	(13 of 69 states)
+unreached in proctype controller
+	line 85, "pan.___", state 11, "msg1?msg"
+	line 25, "pan.___", state 27, "(((random_timeout>=0)&&(random_timeout<10)))"
+	line 25, "pan.___", state 27, "((random_timeout==10))"
+	line 32, "pan.___", state 30, "random_timeout = 0"
+	line 103, "pan.___", state 35, "msg1?msg"
+	line 118, "pan.___", state 38, "msg2!raise"
+	line 115, "pan.___", state 40, "ct_state = c0"
+	line 83, "pan.___", state 41, "((ct_state==c0))"
+	line 83, "pan.___", state 41, "(((ct_state==c1)&&(time_out[1]==0)))"
+	line 83, "pan.___", state 41, "((ct_state==c2))"
+	line 83, "pan.___", state 41, "(((ct_state==c3)&&(time_out[1]==0)))"
+	line 122, "pan.___", state 44, "-end-"
+	(7 of 44 states)
+unreached in proctype gate
+	line 25, "pan.___", state 13, "(((random_timeout>=0)&&(random_timeout<10)))"
+	line 25, "pan.___", state 13, "((random_timeout==10))"
+	line 32, "pan.___", state 16, "random_timeout = 0"
+	line 131, "pan.___", state 21, "msg2?msg"
+	line 147, "pan.___", state 25, "flag2 = 1"
+	line 148, "pan.___", state 26, "flag1 = 0"
+	line 143, "pan.___", state 27, "g_state = g2"
+	line 25, "pan.___", state 38, "(((random_timeout>=0)&&(random_timeout<20)))"
+	line 25, "pan.___", state 38, "((random_timeout==20))"
+	line 32, "pan.___", state 41, "random_timeout = 0"
+	line 151, "pan.___", state 46, "msg2?msg"
+	line 163, "pan.___", state 50, "g_state = g0"
+	line 129, "pan.___", state 51, "((g_state==g0))"
+	line 129, "pan.___", state 51, "(((g_state==g1)&&(time_out[2]==0)))"
+	line 129, "pan.___", state 51, "((g_state==g2))"
+	line 129, "pan.___", state 51, "(((g_state==g3)&&(time_out[2]==0)))"
+	line 169, "pan.___", state 54, "-end-"
+	(10 of 54 states)
+unreached in proctype time_progress
+	line 182, "pan.___", state 13, "((count<3))"
+	line 182, "pan.___", state 13, "((count==3))"
+	line 205, "pan.___", state 26, "time = 0"
+	line 194, "pan.___", state 32, "((count<3))"
+	line 194, "pan.___", state 32, "((count==3))"
+	line 178, "pan.___", state 35, "min_timeout = time_out[0]"
+	line 213, "pan.___", state 39, "-end-"
+	(5 of 39 states)
+unreached in proctype :init:
+	(0 of 4 states)
+unreached in proctype :never:
+	line 240, "pan.___", state 8, "-end-"
+	(1 of 8 states)
+
+#endif
